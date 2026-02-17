@@ -11,5 +11,5 @@ Add cartesian control<br>
 <del>Add library</del> <br>
 <br>
 <h1>SCARA Dynamic Modelling and Control</h1>
-In this project we will go over the mathematical modelling and control strategies of a SCARA robot arm.
+In this project we will go over the mathematical modelling and control strategies of a SCARA robot arm.<br>
 ![SCARA](images/SCARA.png)
