@@ -233,8 +233,7 @@ J_a\ddot{q}
 $$
 
 ---
-
-### Generalized For n Joints
+ Generalized For n Joints
 
 $$
 \mathrm{diag}\left(k_M\frac{1}{Ri_r}\right)V
