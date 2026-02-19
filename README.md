@@ -222,6 +222,7 @@ I &= \frac{V-k_M\dot{q}i_r}{R}
 \end{aligned}
 $$
 
+<<<<<<< HEAD
 Substitute the current $I$ into the mechanical transmission equation
 
 $$
@@ -249,6 +250,10 @@ k_M\frac{V}{Ri_r} = J_a\ddot{q} + \frac{\tau}{i_r^2\eta} + \dot{q}\left(b + \dot
 $$
 
 Generalized for the $n$ joints:
+=======
+---
+ Generalized For n Joints
+>>>>>>> 3a0dc2289b961dc6fcf0080df6d06eec4a0549b5
 
 $$
 \mathrm{diag}\left(k_M\frac{1}{Ri_r}\right)V
