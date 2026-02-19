@@ -176,6 +176,178 @@ where,<br>
     <li>\eta - efficiency of the motor+gearing</li>
 </ul>
 
-Now after we looked at each component individually it's time we put them together to get the the whole picture.
+Now, after we looked at each component individually it's time we put them together to get the the whole picture.
+First we will revisit the electrical component and we will consider, for simplification purposes, the inductance to be ideal thus making it equal to 0.
+
+$$
+\begin{aligned}
+\left\{
+\begin{aligned}
+V        &= RI + V_{emf} \\
+\tau     &= k_M I \\
+V_{emf}  &= k_M \dot{q}_m
+\end{aligned}
+\right.
+&\;\Longrightarrow\;
+\left\{
+\begin{aligned}
+V        &= RI + k_M \dot{q}_m \\
+\tau     &= k_M I
+\end{aligned}
+\right.
+&\;\Longrightarrow\;
+I = \frac{V-k_M\dot{q}_m}{R}
+\end{aligned}
+$$
+
+Now that we know the equation for the current passing through the motor we can replace it in the mechanical component and arrive at a generalized equation for our motor-gearing.
+
+$$
+\begin{aligned}
+\left\{
+\begin{aligned}
+J_a\ddot{q}_a &= -M + M_{motor} - b\dot{q} \\
+\dot{q} &= \frac{\dot{q}_a}{i_r}, \quad \dot{q}_a = \dot{q}i_r \\
+\tau &= i_r M \eta \\
+M_{motor} &= k_M I
+\end{aligned}
+\right.
+&\;\Longrightarrow\;
+\left\{
+\begin{aligned}
+J_a\ddot{q}i_r &= -\frac{\tau}{i_r\eta} + k_M I - b\dot{q}i_r \\
+I &= \frac{V-k_M\dot{q}i_r}{R}
+\end{aligned}
+\right.
+\end{aligned}
+$$
+
+Substitute the current $I$ into the mechanical transmission equation
+
+$$
+J_a\ddot{q}i_r = -\frac{\tau}{i_r\eta} + k_M \left(\frac{V-k_M\dot{q}}{R}\right) - b\dot{q}i_r
+$$
+
+$$
+J_a\ddot{q}i_r = -\frac{\tau}{i_r\eta} + k_M\frac{V}{R} - \frac{k_M^2\dot{q}i_r}{R} - b\dot{q}i_r
+$$
+
+Factor out $\dot{q}$
+
+$$
+J_a\ddot{q}i_r = -\frac{\tau}{i_r\eta} + k_M\frac{V}{R} - \dot{q}i_r\left(b + \dot{q}\frac{k_M^2}{R}\right)
+$$
+
+$$
+k_M\frac{V}{R} = J_a\ddot{q}i_r + \frac{\tau}{i_r\eta} + \dot{q}i_r\left(b + \dot{q}\frac{k_M^2}{R}\right)
+$$
+
+Multiply everything by $\frac{1}{i_r}$ to simplify the calculations and obtain the main equation
+
+$$
+k_M\frac{V}{Ri_r} = J_a\ddot{q} + \frac{\tau}{i_r^2\eta} + \dot{q}\left(b + \dot{q}\frac{k_M^2}{R}\right)
+$$
+
+Generalized for the $n$ joints:
+
+$$
+\mathrm{diag}\left(k_M\frac{1}{Ri_r}\right)V
+=
+\mathrm{diag}(J_a)\ddot{q}
++
+\mathrm{diag}\left(\frac{1}{i_r^2\eta}\right)\tau
++
+\mathrm{diag}\left(b + \dot{q}\frac{k_M^2}{R}\right)\dot{q}
+$$
+
+Where:
+
+- diag() is the diagonal matrix with the corresponding elements  
+- $q$, $\dot{q}$, $\ddot{q}$ are the joint motion vectors  
+- **u** is the supply voltage vector  
+- $\tau$ is the vector of torques driving the structure
+
+<h3>Simulink implementation</h3>
+
+Now that we know the equation for the motor we can move ahead and implement the classical control in Simulink and look at some results.<br>
+Using the provided Simulink Library we can get all the blocks and stitch them together.<br>
+
+![SCARA](images/classical_control.png)<br>
+
+## System Blocks Description
+
+### Trajectory Block
+Contains:
+- $q_{desired}$
+- $\dot{q}_{desired}$
+- $\ddot{q}_{desired}$
+
+Which are calculated by our trajectory function.
+
+---
+
+### $Motor_{1,2}$ Blocks
+Contain the DC motor differential equations.
+
+**Input parameters:**
+- **tau** – resistive torque calculated by the inverse dynamics block  
+- **u** – previously calculated control signal  
+- **velocity** - of the motor 
+
+The motor block contains our previously calculated equation
+
+![DC Motor Diagram](images/motor.png)
 
 
+
+---
+
+## Motor + Gearbox Specifications
+
+### Motor + Gearbox Combination
+
+| Parameter | Value |
+|---|---|
+| Maximum Voltage | 24 V |
+| No-load Speed | 82.70 rpm |
+| Maximum Speed | 68 rpm |
+| Maximum Torque | 7.5 Nm |
+| Maximum Current | 4.26 A |
+| Efficiency $\eta$ | 57.59% |
+
+---
+
+### Motor Parameters
+
+| Parameter | Value |
+|---|---|
+| Torque Coefficient $k_M$ | 27.3 mNm/A |
+| Speed Constant $k_e$ | 350 rpm/V |
+| Rotor Inertia $J_c$ | 72.8 g·cm² |
+| Resistance R | 0.331 Ω |
+| Inductance L | 0.103 mH |
+| Motor Mass $M_m$ | 326.9 g |
+| Length | 71.9 mm |
+| Efficiency | 88.6% |
+
+---
+
+### Gearbox Parameters
+
+| Parameter | Value |
+|---|---|
+| Ratio $i_r$ | 103:1 |
+| Efficiency | 65% |
+
+---
+
+## SCARA Inverse Dynamics Block
+
+Represents the SCARA robot structure where the torque required to be overcome by the motor is computed.
+
+**Input parameters:**
+- $q_2$ – motor commanded position  
+- $dq_{1,2}$ – motor commanded speed  
+- $ddq_{1,2}$ – motor commanded acceleration  
+
+![DC Motor Diagram](images/SCARA_inverse_dynamics.png)
