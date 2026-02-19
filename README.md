@@ -115,12 +115,9 @@ Control is very important for influencing the behaviour of a dynamic model or a 
 The actual component that calculates the error and gives a new input for the model is called a PID Controller.<br>
 
 <ul>
-    <li>Proportional - it adjusts the real value so that it's proportional to the reference value</li>
-    u(t) = K_p e(t)
-    <li>Integrative - it sums the error over time and adjuts the output to eliminate the steady-state error</li>
-    u(t) = K_i \int e(t) dt
-    <li>Derivative - it reacts to the rate of change of the error and anticipates future errors</li>
-    u(t) = K_d \frac{de(t)}{dt}
+    <li>Proportional - it adjusts the real value so that it's proportional to the reference value. $u(t)=K_p\,e(t)$</li>
+    <li>Integrative - it sums the error over time and adjusts the output to eliminate the steady-state error. $u(t)=K_i\int e(t)\,dt$</li>
+    <li>Derivative - it reacts to the rate of change of the error and anticipates future errors. $u(t)=K_d\dfrac{de(t)}{dt}$</li>
 </ul>
 
 <h3>Control strategies</h3>
@@ -133,8 +130,8 @@ For this project we will be looking at four types of control strategies:
 </ul>
 
 <h2>Classical Control</h2>
-Classical control is aimed at controlling the motors of each joint. In this configuration the motor is controlled by a PID which determines the neccesary voltage to be applied. The output of the motor is the set of movements applied to the joint (q, /dot{q}, /ddot{q}). These are then send to the inverse dynamics block that acts as a generator of disturbances applied to the motor.<br>
-To recap, a voltage is applied to the motor which generates a set of movements in the joint and that joint creates a moment which resists to the motor which is then applied to the motor.<br>
+Classical control is aimed at controlling the motors of each joint. In this configuration the motor is controlled by a PID which determines the necessary voltage to be applied. The output of the motor is the set of movements applied to the joint ($q$, $\dot{q}$, $\ddot{q}$). These are then sent to the inverse dynamics block that acts as a generator of disturbances applied to the motor.<br>
+To recap, a voltage is applied to the motor which generates a set of movements in the joint and that joint creates a moment which resists the motor which is then applied to the motor.<br>
 
 <h3>Dynamic modelling of a DC motor</h3>
 For our system to be as close as possible to reality we will take a holistic approach to modelling. This consists of the DC motor and the mechanical transmission.<br>
@@ -144,15 +141,11 @@ For our system to be as close as possible to reality we will take a holistic app
 V = RI + L\frac{dI}{dt} + V_{emf}<br>
 where,<br>
 <ul>
-    <li>V - voltage</li>
-    <li>R - resistance of the armature</li>
-    <li>I - current flowing through the armature</li>
-    <li>L - inductance of the armature</li> 
-    <li>V_emf - back EMF<br>
-    V_emf = k_emf * omega<br>
-    k_emf - back EMF constant<br>
-    omega - angular velocity of the rotor
-    </li>
+    <li>$V$ - voltage</li>
+    <li>$R$ - resistance of the armature</li>
+    <li>$I$ - current flowing through the armature</li>
+    <li>$L$ - inductance of the armature</li>
+    <li>$V_{emf}$ - back EMF. $V_{emf}=k_{emf}\,\omega$, where $k_{emf}$ is the back EMF constant and $\omega$ is the angular velocity of the rotor.</li>
 </ul>
 <br>
 <h4>The mechanical component:</h4>
@@ -166,14 +159,14 @@ J_a \ddot{q}_a = -M + M_{\text{motor}} - b \dot{q} \\
 $$
 where,<br>
 <ul>
-    <li>J_a - moment of inertia(rotor+shaft)</li>
-    <li>\ddot{q}_a \dot{q}_a - acceleration and velocity of the motor</li>
-    <li>M - resistive torque</li>
-    <li>M_motor - motor torque M_motor = k_M * I</li>
-    <li>b - viscous coefficient</li>
-    <li>\ddot{q} \dot{q} - acceleration and velocity of the output shaft(after the gearing)</li>
-    <li>\tau - joint torque</li>
-    <li>\eta - efficiency of the motor+gearing</li>
+    <li>$J_a$ - moment of inertia (rotor + shaft)</li>
+    <li>$\ddot{q}_a$, $\dot{q}_a$ - acceleration and velocity of the motor</li>
+    <li>$M$ - resistive torque</li>
+    <li>$M_{motor}$ - motor torque, $M_{motor}=k_M I$</li>
+    <li>$b$ - viscous coefficient</li>
+    <li>$\ddot{q}$, $\dot{q}$ - acceleration and velocity of the output shaft (after the gearing)</li>
+    <li>$\tau$ - joint torque</li>
+    <li>$\eta$ - efficiency of the motor + gearing</li>
 </ul>
 
 Now, after we looked at each component individually it's time we put them together to get the the whole picture.
