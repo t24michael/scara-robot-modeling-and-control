@@ -189,7 +189,7 @@ V        &= RI + k_M \dot{q}_m \\
 \end{aligned}
 \right.
 &\;\Longrightarrow\;
-I = \frac{V-k_M\dot{q}_m}{R}
+I = \frac{V - k_M \dot{q}_m}{R}
 \end{aligned}
 $$
 
@@ -199,17 +199,17 @@ $$
 \begin{aligned}
 \left\{
 \begin{aligned}
-J_a\ddot{q}_a &= -M + M_{motor} - b\dot{q} \\
-\dot{q} &= \frac{\dot{q}_a}{i_r}, \quad \dot{q}_a = \dot{q}i_r \\
+J_a \ddot{q}_a &= -M + M_{motor} - b \dot{q} \\
+\dot{q} &= \frac{\dot{q}_a}{i_r}, \quad \dot{q}_a = \dot{q} i_r \\
 \tau &= i_r M \eta \\
 M_{motor} &= k_M I
 \end{aligned}
 \right.
-&\;\Longrightarrow\;
+\;\Longrightarrow\;
 \left\{
 \begin{aligned}
-J_a\ddot{q}i_r &= -\frac{\tau}{i_r\eta} + k_M I - b\dot{q}i_r \\
-I &= \frac{V-k_M\dot{q}i_r}{R}
+J_a \ddot{q} i_r &= -\frac{\tau}{i_r \eta} + k_M I - b \dot{q} i_r \\
+I &= \frac{V - k_M \dot{q} i_r}{R}
 \end{aligned}
 \right.
 \end{aligned}
