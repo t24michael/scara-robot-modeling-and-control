@@ -66,7 +66,7 @@ $$
 M(q) = \sum_{i=1}^{n} \left( m_i J_{vi}^T J_{vi} + J_{\omega i}^T I_{Ci} J_{\omega i} \right)
 $$
 
-Where:
+where:
 
 - $m_i$ — mass of the link  
 - $I_{Ci}$ — inertia tensor with respect to COM  
@@ -74,21 +74,15 @@ Where:
 
 ---
 
-## Coriolis & Centrifugal Matrices
+## Coriolis & Centrifugal matrices
 
-These are fictitious forces because they only appear real inside a rotating reference frame.
+The coriolis & centrifugal forces are also known as ficticious forces because they only appear real to an object inside the system of reference.  
+For the coriolis force, imagine yourself in a playground spinning wheel. From your point of view the world is spinning and you are stationary but for the outside observer you're rotating and the world is still. Now imagine you throw something. For you the trajectory of the throw seems to be a straight line but for the outside viewer it's a curved trajectory.  
+For the centrifugal force, you can picture a semicircle road and as you drive on the road the car is "pulled" to the center of the semicircle keeping you on the road and not letting you fly off it.  
+For our SCARA example we will see how these forces affect each link.
 
-### Coriolis Example
-If you stand on a spinning playground wheel and throw an object, it appears straight to you but curved to an external observer.
-
-### Centrifugal Example
-When driving on a curved road, the vehicle feels pulled outward.
-
-For the SCARA example:
-
-### Centrifugal Term
 $$
-C(q)[\dot{q}^2] =
+C(q)[\dot{q}^2] = 
 \begin{bmatrix}
 b_{111} & b_{122} & \cdots & b_{1nn} \\
 b_{211} & b_{222} & \cdots & b_{2nn} \\
@@ -103,14 +97,13 @@ b_{n11} & b_{n22} & \cdots & b_{nnn}
 \end{bmatrix}
 $$
 
-### Coriolis Term
 $$
-B(q)[\dot{q}\dot{q}] =
+B(q)[\dot{q}\dot{q}] = 
 \begin{bmatrix}
-2b_{112} & 2b_{123} & \cdots & 2b_{1(n-1)n} \\
-2b_{212} & 2b_{223} & \cdots & 2b_{2(n-1)n} \\
+2b_{112} & 2b_{123} & \cdots & 2b_{1n-1n} \\
+2b_{212} & 2b_{223} & \cdots & 2b_{2n-1n} \\
 \vdots & \vdots & \ddots & \vdots \\
-2b_{n12} & 2b_{n23} & \cdots & 2b_{n(n-1)n}
+2b_{n12} & 2b_{n23} & \cdots & 2b_{nn-1n}
 \end{bmatrix}
 \begin{bmatrix}
 \dot{q}_1 \dot{q}_2 \\
@@ -120,7 +113,7 @@ B(q)[\dot{q}\dot{q}] =
 \end{bmatrix}
 $$
 
-Christoffel coefficients:
+where the Christoffel coefficients are:
 
 $$
 b_{ijk} = \frac{1}{2}(m_{ijk} + m_{ikj} + m_{jki})
@@ -130,32 +123,23 @@ $$
 m_{ijk} = \frac{\partial m_{ij}}{\partial q_k}
 $$
 
+where $m_{ij}$ is the element $ij$ of the matrix $M(q)$.
+
 ---
 
 ## Control
 
-Control influences the behavior of a dynamic model by modifying inputs based on feedback.
-
-Goal: minimize the error between desired and measured values.
+Control is very important for influencing the behaviour of a dynamic model or a process. It's goal is to modify the input for the model/process based on the feedback it got. For our SCARA robot, the goal is to minimze the error between the desired value and the actual value given by the sensors.
 
 ---
 
-## PID Controller Components
+## The components of a PID
 
-- **Proportional**
-$$
-u(t) = K_p e(t)
-$$
+The actual component that calculates the error and gives a new input for the model is called a PID Controller.
 
-- **Integral**
-$$
-u(t) = K_i \int e(t) dt
-$$
-
-- **Derivative**
-$$
-u(t) = K_d \frac{de(t)}{dt}
-$$
+- Proportional - it adjusts the real value so that it's proportional to the reference value. $u(t)=K_p\,e(t)$
+- Integrative - it sums the error over time and adjusts the output to eliminate the steady-state error. $u(t)=K_i\int e(t)\,dt$
+- Derivative - it reacts to the rate of change of the error and anticipates future errors. $u(t)=K_d\dfrac{de(t)}{dt}$
 
 ---
 
@@ -170,23 +154,14 @@ $$
 
 ## Classical Control
 
-Each joint motor is controlled using a PID controller.
-
-The motor produces motion:
-$$
-(q, \dot{q}, \ddot{q})
-$$
-
-Inverse dynamics generates disturbance torques applied back to the motor.
+Classical control is aimed at controlling the motors of each joint. In this configuration the motor is controlled by a PID which determines the necessary voltage to be applied. The output of the motor is the set of movements applied to the joint ($q$, $\dot{q}$, $\ddot{q}$). These are then sent to the inverse dynamics block that acts as a generator of disturbances applied to the motor.  
+To recap, a voltage is applied to the motor which generates a set of movements in the joint and that joint creates a moment which resists the motor which is then applied to the motor.
 
 ---
 
 ## DC Motor Dynamic Modelling
 
-We model:
-
-- DC motor electrical dynamics  
-- Mechanical transmission  
+For our system to be as close as possible to reality we will take a holistic approach to modelling. This consists of the DC motor and the mechanical transmission.
 
 ---
 
@@ -198,11 +173,11 @@ $$
 
 Where:
 
-- $V$ — voltage  
-- $R$ — armature resistance  
-- $I$ — current  
-- $L$ — inductance  
-- $V_{emf} = k_{emf}\omega$  
+- $V$ - voltage
+- $R$ - resistance of the armature
+- $I$ - current flowing through the armature
+- $L$ - inductance of the armature
+- $V_{emf}$ - back EMF. $V_{emf}=k_{emf}\,\omega$, where $k_{emf}$ is the back EMF constant and $\omega$ is the angular velocity of the rotor.
 
 ---
 
@@ -216,11 +191,23 @@ J_a \ddot{q}_a = -M + M_{motor} - b\dot{q} \\
 \end{cases}
 $$
 
+where:
+
+- $J_a$ - moment of inertia (rotor + shaft)
+- $\ddot{q}_a$, $\dot{q}_a$ - acceleration and velocity of the motor
+- $M$ - resistive torque
+- $M_{motor}$ - motor torque, $M_{motor}=k_M I$
+- $b$ - viscous coefficient
+- $\ddot{q}$, $\dot{q}$ - acceleration and velocity of the output shaft (after the gearing)
+- $\tau$ - joint torque
+- $\eta$ - efficiency of the motor + gearing
+
 ---
 
 ### Combined Electrical + Mechanical Model
 
-Assuming $L = 0$:
+Now, after we looked at each component individually it's time we put them together to get the the whole picture.  
+First we will revisit the electrical component and we will consider, for simplification purposes, the inductance to be ideal thus making it equal to 0.
 
 $$
 V = RI + k_M \dot{q}_m
@@ -260,6 +247,9 @@ $$
 ---
 
 ## Simulink Implementation
+
+Now that we know the equation for the motor we can move ahead and implement the classical control in Simulink and look at some results.  
+Using the provided Simulink Library we can get all the blocks and stitch them together.
 
 ![Classical Control](images/classical_control.png)
 
