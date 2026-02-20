@@ -174,20 +174,12 @@ First we will revisit the electrical component and we will consider, for simplif
 
 $$
 \begin{aligned}
-\left\{
-\begin{aligned}
-V        &= RI + V_{emf} \\
-\tau     &= k_M I \\
-V_{emf}  &= k_M \dot{q}_m
-\end{aligned}
-\right.
+V &= RI + V_{emf} \\
+\tau &= k_M I \\
+V_{emf} &= k_M \dot{q}_m
 &\;\Longrightarrow\;
-\left\{
-\begin{aligned}
-V        &= RI + k_M \dot{q}_m \\
-\tau     &= k_M I
-\end{aligned}
-\right.
+V &= RI + k_M \dot{q}_m \\
+\tau &= k_M I
 &\;\Longrightarrow\;
 I = \frac{V - k_M \dot{q}_m}{R}
 \end{aligned}
@@ -197,21 +189,15 @@ Now that we know the equation for the current passing through the motor we can r
 
 $$
 \begin{aligned}
-\left\{
-\begin{aligned}
 J_a \ddot{q}_a &= -M + M_{motor} - b \dot{q} \\
 \dot{q} &= \frac{\dot{q}_a}{i_r}, \quad \dot{q}_a = \dot{q} i_r \\
 \tau &= i_r M \eta \\
 M_{motor} &= k_M I
-\end{aligned}
-\right.
-\;\Longrightarrow\;
-\left\{
-\begin{aligned}
+\\[6pt]
+&\Longrightarrow
+\\[6pt]
 J_a \ddot{q} i_r &= -\frac{\tau}{i_r \eta} + k_M I - b \dot{q} i_r \\
 I &= \frac{V - k_M \dot{q} i_r}{R}
-\end{aligned}
-\right.
 \end{aligned}
 $$
 
